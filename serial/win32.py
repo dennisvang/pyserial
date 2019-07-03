@@ -134,8 +134,13 @@ ClearCommBreak = _stdcall_libraries['kernel32'].ClearCommBreak
 ClearCommBreak.restype = BOOL
 ClearCommBreak.argtypes = [HANDLE]
 
-LPCOMSTAT = POINTER(_COMSTAT)
 LPCOMMPROP = POINTER(_COMMPROP)
+
+GetCommProperties = _stdcall_libraries['kernel32'].GetCommProperties
+GetCommProperties.restype = BOOL
+GetCommProperties.argtypes = [HANDLE, LPCOMMPROP]
+
+LPCOMSTAT = POINTER(_COMSTAT)
 
 ClearCommError = _stdcall_libraries['kernel32'].ClearCommError
 ClearCommError.restype = BOOL
@@ -375,7 +380,7 @@ __all__ = ['GetLastError', 'MS_CTS_ON', 'FILE_ATTRIBUTE_NORMAL',
            'RTS_CONTROL_ENABLE', '_DCB', 'CreateEvent',
            '_COMMTIMEOUTS', '_SECURITY_ATTRIBUTES', 'EV_DSR',
            'EV_PERR', 'EV_RXFLAG', 'OPEN_EXISTING', 'DCB',
-           'FILE_FLAG_OVERLAPPED', 'EV_CTS', 'SetupComm',
+           'FILE_FLAG_OVERLAPPED', 'EV_CTS', 'SetupComm', 'GetCommProperties',
            'LPOVERLAPPED', 'EV_TXEMPTY', 'ClearCommBreak',
            'LPSECURITY_ATTRIBUTES', 'SetCommBreak', 'SetCommTimeouts',
            'COMMTIMEOUTS', 'ODDPARITY', 'EV_RLSD',
