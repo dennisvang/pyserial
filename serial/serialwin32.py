@@ -424,6 +424,20 @@ class Serial(SerialBase):
             tx_size = rx_size
         win32.SetupComm(self._port_handle, rx_size, tx_size)
 
+    def _GetCommProperties(self):
+        """
+        docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-getcommproperties
+
+        Note: to print content, e.g. do:
+
+            for field_name, _ in commprop._fields_:
+                print(field_name, getattr(commprop, field_name))
+
+        """
+        commprop = win32.COMMPROP()
+        win32.GetCommProperties(self._port_handle, ctypes.byref(commprop))
+        return commprop
+
     def set_output_flow_control(self, enable=True):
         """\
         Manually control flow - when software flow control is enabled.
