@@ -19,6 +19,7 @@ from ctypes.wintypes import LPCWSTR
 from ctypes.wintypes import DWORD
 from ctypes.wintypes import WORD
 from ctypes.wintypes import BYTE
+from ctypes.wintypes import WCHAR
 _stdcall_libraries = {}
 _stdcall_libraries['kernel32'] = WinDLL('kernel32')
 
@@ -81,6 +82,12 @@ class _COMSTAT(Structure):
 COMSTAT = _COMSTAT
 
 
+class _COMMPROP(Structure):
+    pass
+
+COMMPROP = _COMMPROP
+
+
 class _DCB(Structure):
     pass
 
@@ -128,6 +135,7 @@ ClearCommBreak.restype = BOOL
 ClearCommBreak.argtypes = [HANDLE]
 
 LPCOMSTAT = POINTER(_COMSTAT)
+LPCOMMPROP = POINTER(_COMMPROP)
 
 ClearCommError = _stdcall_libraries['kernel32'].ClearCommError
 ClearCommError.restype = BOOL
@@ -302,6 +310,26 @@ _COMSTAT._fields_ = [
     ('cbInQue', DWORD),
     ('cbOutQue', DWORD),
 ]
+_COMMPROP._fields_ = [
+    ('wPacketLength', WORD),
+    ('wPacketVersion', WORD),
+    ('dwServiceMask', DWORD),
+    ('dwReserved1', DWORD),
+    ('dwMaxTxQueue', DWORD),
+    ('dwMaxRxQueue', DWORD),
+    ('dwMaxBaud', DWORD),
+    ('dwProvSubType', DWORD),
+    ('dwProvCapabilities', DWORD),
+    ('dwSettableParams', DWORD),
+    ('dwSettableBaud', DWORD),
+    ('wSettableData', WORD),
+    ('wSettableStopParity', WORD),
+    ('dwCurrentTxQueue', DWORD),
+    ('dwCurrentRxQueue', DWORD),
+    ('dwProvSpec1', DWORD),
+    ('dwProvSpec2', DWORD),
+    ('wcProvChar', WCHAR * 1)  # definition in C++: WCHAR wcProvChar[1];
+]
 _DCB._fields_ = [
     ('DCBlength', DWORD),
     ('BaudRate', DWORD),
@@ -340,7 +368,7 @@ _COMMTIMEOUTS._fields_ = [
     ('WriteTotalTimeoutConstant', DWORD),
 ]
 __all__ = ['GetLastError', 'MS_CTS_ON', 'FILE_ATTRIBUTE_NORMAL',
-           'DTR_CONTROL_ENABLE', '_COMSTAT', 'MS_RLSD_ON',
+           'DTR_CONTROL_ENABLE', '_COMSTAT', '_COMMPROP', 'MS_RLSD_ON',
            'GetOverlappedResult', 'SETXON', 'PURGE_TXABORT',
            'PurgeComm', 'N11_OVERLAPPED4DOLLAR_48E', 'EV_RING',
            'ONESTOPBIT', 'SETXOFF', 'PURGE_RXABORT', 'GetCommState',
@@ -352,9 +380,9 @@ __all__ = ['GetLastError', 'MS_CTS_ON', 'FILE_ATTRIBUTE_NORMAL',
            'LPSECURITY_ATTRIBUTES', 'SetCommBreak', 'SetCommTimeouts',
            'COMMTIMEOUTS', 'ODDPARITY', 'EV_RLSD',
            'GetCommModemStatus', 'EV_EVENT2', 'PURGE_TXCLEAR',
-           'EV_BREAK', 'EVENPARITY', 'LPCVOID', 'COMSTAT', 'ReadFile',
+           'EV_BREAK', 'EVENPARITY', 'LPCVOID', 'COMSTAT', 'COMMPROP', 'ReadFile',
            'PVOID', '_OVERLAPPED', 'WriteFile', 'GetCommTimeouts',
-           'ResetEvent', 'EV_RXCHAR', 'LPCOMSTAT', 'ClearCommError',
+           'ResetEvent', 'EV_RXCHAR', 'LPCOMSTAT', 'LPCOMMPROP', 'ClearCommError',
            'ERROR_IO_PENDING', 'EscapeCommFunction', 'GENERIC_READ',
            'RTS_CONTROL_HANDSHAKE', 'OVERLAPPED',
            'DTR_CONTROL_HANDSHAKE', 'PURGE_RXCLEAR', 'GENERIC_WRITE',
